@@ -826,9 +826,11 @@ void do_game_logic(void)
 	//적들 처리 
 	for (int i = 0; i<ENEMY_NUM; i++)
 	{
-		if (enemy[i].y_pos > 640)
+		if (enemy[i].y_pos > 680)
 		{
-			enemy[i].init((float)(rand() % 300), rand() % 200 - 350);
+			play = false;
+			gameover = true;
+			//enemy[i].init((float)(rand() % 300), rand() % 200 - 350);
 			
 		}
 		else

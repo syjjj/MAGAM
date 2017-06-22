@@ -1,8 +1,7 @@
 ﻿  Matrices49860489.cpp
-c:\users\user\desktop\최종\magam\matrices49860489.cpp(337): warning C4100: 'lpCmdLine': 참조되지 않은 정식 매개 변수입니다.
-c:\users\user\desktop\최종\magam\matrices49860489.cpp(336): warning C4100: 'hPrevInstance': 참조되지 않은 정식 매개 변수입니다.
-c:\users\user\desktop\최종\magam\matrices49860489.cpp(767): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\user\desktop\최종\magam\matrices49860489.cpp(831): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\user\desktop\최종\magam\matrices49860489.cpp(866): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Matrices49860489_2010.vcxproj -> C:\Users\User\Desktop\최종\MAGAM\Debug\Matrices49860489.exe
-  Matrices49860489_2010.vcxproj -> C:\Users\User\Desktop\최종\MAGAM\Debug\Matrices49860489.pdb (Full PDB)
+c:\users\user\desktop\과제레퍼런스\magam\matrices49860489.cpp(337): warning C4100: 'lpCmdLine': 참조되지 않은 정식 매개 변수입니다.
+c:\users\user\desktop\과제레퍼런스\magam\matrices49860489.cpp(336): warning C4100: 'hPrevInstance': 참조되지 않은 정식 매개 변수입니다.
+c:\users\user\desktop\과제레퍼런스\magam\matrices49860489.cpp(767): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\user\desktop\과제레퍼런스\magam\matrices49860489.cpp(868): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Matrices49860489_2010.vcxproj -> C:\Users\User\Desktop\과제레퍼런스\MAGAM\Debug\Matrices49860489.exe
+  Matrices49860489_2010.vcxproj -> C:\Users\User\Desktop\과제레퍼런스\MAGAM\Debug\Matrices49860489.pdb (Full PDB)
