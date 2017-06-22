@@ -5,6 +5,10 @@
 #include <d3dx9.h>
 #include <iostream>
 
+#include<MMSystem.h> 
+
+#pragma comment(lib,"Winmm.lib")
+
 // define the screen resolution and keyboard macros
 #define SCREEN_WIDTH  480
 #define SCREEN_HEIGHT 640
@@ -119,7 +123,7 @@ void Item::init(float x, float y)
 
 void Item::move()
 {
-	y_pos += 3;
+	y_pos += 8;
 
 }
 
@@ -266,7 +270,7 @@ public:
 bool Bullet::check_collision(float x, float y)
 {
 		//충돌 처리 시 
-		if (sphere_collision_check(x_pos, y_pos, 32, x, y, 32) == true)
+		if (sphere_collision_check(x_pos, y_pos, 20, x, y, 20) == true)
 		{
 			bShow = false;
 			return true;
@@ -325,7 +329,7 @@ void Bullet::hide()
 Hero hero;
 Enemy enemy[ENEMY_NUM];
 Bullet bullet[BULLET_NUM];
-
+Item items[BULLET_NUM];
 
 // the entry point for any Windows program
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -364,6 +368,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	MSG msg;
 
+	bool bgm1onplaying = false;
+	bool bgm2onplaying = false;
+
 	while (TRUE)
 	{
 		DWORD starting_point = GetTickCount();
@@ -377,9 +384,24 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 
+
+
 		do_game_logic();
 
 		render_frame();
+
+		if (play == true&&bgm1onplaying==false)
+		{
+			PlaySound(TEXT("bgm1.wav"), NULL, SND_ASYNC | SND_LOOP);
+			bgm1onplaying = true;
+			bgm2onplaying = false;
+		}
+		if (gameover == true && bgm2onplaying == false)
+		{
+			PlaySound(TEXT("bgm2.wav"), NULL, SND_ASYNC | SND_LOOP);
+			bgm2onplaying = true;
+			bgm1onplaying = false;
+		}
 
 		// check the 'escape' key
 		if (KEY_DOWN(VK_ESCAPE))
@@ -593,8 +615,8 @@ void initD3D(HWND hWnd)
 
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 		L"Resource/enemy1.png",    // the file name
-		65,    // default width
-		65,    // default height
+		40,    // default width
+		40,    // default height
 		D3DX_DEFAULT,    // no mip mapping
 		NULL,    // regular usage
 		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
@@ -608,8 +630,8 @@ void initD3D(HWND hWnd)
 
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 		L"Resource/enemy2.png",    // the file name
-		65,    // default width
-		65,    // default height
+		40,    // default width
+		40,    // default height
 		D3DX_DEFAULT,    // no mip mapping
 		NULL,    // regular usage
 		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
@@ -623,8 +645,8 @@ void initD3D(HWND hWnd)
 
 	D3DXCreateTextureFromFileEx(d3ddev,    // the device pointer
 		L"Resource/enemy3.png",    // the file name
-		65,    // default width
-		65,    // default height
+		40,    // default width
+		40,    // default height
 		D3DX_DEFAULT,    // no mip mapping
 		NULL,    // regular usage
 		D3DFMT_A8R8G8B8,    // 32-bit pixels with alpha
@@ -751,6 +773,11 @@ void init_game(void)
 		bullet[i].init(hero.x_pos, hero.y_pos);
 	}
 
+	for (int i = 0; i < BULLET_NUM; i++)
+	{
+		items[i].init(680, 680);
+	}
+
 }
 
 
@@ -834,8 +861,9 @@ void do_game_logic(void)
 		{
 			if (bullet[i].check_collision(enemy[j].x_pos, enemy[j].y_pos) == true)
 			{
-				enemy[j].init((float)(rand() % 300), rand() % 200 - 300);
-
+				items[i].ishow = true;
+				items[i].init(enemy[j].x_pos, enemy[j].y_pos);
+				enemy[j].init((float)(rand() % 350), rand() % 200 - 300);
 				bullet[i].hide();
 			}
 		}
@@ -844,7 +872,11 @@ void do_game_logic(void)
 	}
 	}
 
-
+	for (int i = 0; i < BULLET_NUM; i++)
+	{
+		if(items[i].ishow==true)
+			items[i].move();
+	}
 }
 
 // this is the function used to render a single frame
@@ -905,7 +937,6 @@ void render_frame(void)
 
 	if (play == true)
 	{
-
 		//주인공 
 		RECT part;
 		SetRect(&part, 0, 0, 45, 35);
@@ -933,7 +964,7 @@ void render_frame(void)
 		}
 		////에네미 
 		RECT part2;
-		SetRect(&part2, 0, 0, 65, 65);
+		SetRect(&part2, 0, 0, 40, 40);
 		D3DXVECTOR3 center2(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
 		int num[ENEMY_NUM];
 		for (int i = 0; i < ENEMY_NUM; i++)
@@ -955,6 +986,18 @@ void render_frame(void)
 			}
 		}
 
+		RECT part3;
+		SetRect(&part3, 0, 0, 25, 20);
+		D3DXVECTOR3 center3(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
+		for (int i = 0; i < BULLET_NUM; i++)
+		{
+			if (items[i].ishow == true)
+			{
+				D3DXVECTOR3 position3(items[i].x_pos, items[i].y_pos, 0.0f);    // position at 50, 50 with no depth
+				d3dspt->Draw(item, &part3, &center3, &position3, D3DCOLOR_ARGB(255, 255, 255, 255));
+			}
+		}
+
 		RECT part4;
 		SetRect(&part4, 0, 0, 72, 640);
 		D3DXVECTOR3 center4(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
@@ -971,6 +1014,7 @@ void render_frame(void)
 	
 	if (gameover== true)
 	{
+
 		RECT part;
 		SetRect(&part, 0, 0, 247, 25);
 		D3DXVECTOR3 center(0.0f, 0.0f, 0.0f);    // center at the upper-left corner
